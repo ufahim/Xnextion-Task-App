@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:xnextion_task_app/Screens/favourite_screen.dart';
 import 'package:xnextion_task_app/hive/favourite_model.dart';
+import 'package:xnextion_task_app/view_models/movie_detail.dart';
 
 class DetailScreen extends StatelessWidget {
-  const DetailScreen({Key? key, required this.movieModel}) : super(key: key);
+  DetailScreen({Key? key, required this.movieModel}) : super(key: key);
   final movieModel;
-
+  MovieDetailsViewModel model = MovieDetailsViewModel();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,7 +39,7 @@ class DetailScreen extends StatelessWidget {
                         subtitle: Text(
                           movieModel.overview?.toString() ?? 'No Title',
                           maxLines: 5,
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 10.sp,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -52,25 +53,8 @@ class DetailScreen extends StatelessWidget {
                     right: 8,
                     child: IconButton(
                       onPressed: () {
-                        Get.snackbar(
-                          'Favourite',
-                          'added to favourite',
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.blue,
-                          colorText: Colors.white,
-                          duration: const Duration(seconds: 3),
-                          borderRadius: 10,
-                          isDismissible: true,
-                          forwardAnimationCurve: Curves.easeOutBack,
-                          reverseAnimationCurve: Curves.easeInBack,
-                          icon: const Icon(
-                            Icons.favorite_border_outlined,
-                            color: Colors.red,
-                          ),
-                          shouldIconPulse: false,
-                        );
-                        addTofavourite(
-                          movieModel.title?.toString(),
+                        model.addToFavourite(
+                          movieModel.title!.toString(),
                           movieModel.posterPath.toString(),
                         );
                       },
@@ -80,10 +64,14 @@ class DetailScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  IconButton(onPressed: (){
-                    Get.back();
-                  },
-                   icon: const Icon(Icons.arrow_back,color: Colors.white,))
+                  IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ))
                 ],
               ),
               ListTile(
@@ -101,16 +89,4 @@ class DetailScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-void addTofavourite(
-  title,
-  imageUrl,
-) {
-  final historyBox = Hive.box<FavouriteModel>('favourite');
-  final historyItem = FavouriteModel(
-    title,
-    imageUrl,
-  );
-  historyBox.add(historyItem);
 }

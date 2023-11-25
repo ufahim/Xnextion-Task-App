@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:xnextion_task_app/hive/favourite_model.dart';
+import 'package:xnextion_task_app/view_models/movie_detail.dart';
 
 class Favourite extends StatefulWidget {
   const Favourite({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _FavouriteState extends State<Favourite> {
       .reversed
       .toList()
       .cast<FavouriteModel>();
-
+MovieDetailsViewModel model=MovieDetailsViewModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +85,7 @@ class _FavouriteState extends State<Favourite> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
                     onTap: () {
-                      delet(result[i]);
+                      model.delet(result[i]);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -103,7 +104,7 @@ class _FavouriteState extends State<Favourite> {
                           ),
                           trailing: IconButton(
                             onPressed: () {
-                              delet(result[i]);
+                              model.delet(result[i]);
                               Navigator.pop(context);
                               Get.snackbar(
                                 'Delete',
@@ -136,8 +137,5 @@ class _FavouriteState extends State<Favourite> {
     );
   }
 
-  void delet(FavouriteModel favouriteModel) {
-    favouriteModel.delete();
-    setState(() {});
-  }
+ 
 }
